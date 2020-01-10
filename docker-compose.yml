@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:12
+    environment:
+      - POSTGRES_USER=dnsmasq
+      - POSTGRES_PASSWORD=dnsmasq
+      - POSTGRES_DB=dnsmasq
+    volumes:
+      - dbData:/var/lib/postgresql/data
+      - ./logs/db:/var/log/postgresql
+
+  server:
+    build: ./server
+    environment:
+      - DJANGO_SETTINGS_MODULE=server.local_settings
+    entrypoint: bash ./entrypoint.sh
+    depends_on:
+      - db
+    ports:
+      - 8000:8000
+
+volumes:
+  dbData:
