@@ -9,17 +9,30 @@ services:
       - POSTGRES_DB=dnsmasq
     volumes:
       - dbData:/var/lib/postgresql/data
-      - ./logs/db:/var/log/postgresql
+
+  dns:
+    image: andyshinn/dnsmasq
+    entrypoint: dnsmasq -k --hostsdir=/etc/dnsmasq.d/hosts
+    ports:
+    - 53:53/tcp
+    - 53:53/udp
+    cap_add:
+    - NET_ADMIN
+    volumes:
+    - ./conf/dnsmasq:/etc/dnsmasq.d/
 
   server:
     build: ./server
     environment:
-      - DJANGO_SETTINGS_MODULE=server.local_settings
+    - DJANGO_SETTINGS_MODULE=server.local_settings
     entrypoint: bash ./entrypoint.sh
     depends_on:
-      - db
+    - db
     ports:
-      - 8000:8000
+    - 8000:8000
+    volumes:
+    - ./conf/dnsmasq:/dnsmasq
+
 
 volumes:
   dbData:

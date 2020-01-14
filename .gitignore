@@ -134,3 +134,6 @@ dmypy.json
 # django
 **/local_settings.py
 logs
+
+# docker
+./conf/dnsmasq
