@@ -21,3 +21,4 @@ The Django migrations will run automatically. The django server will listen port
 
 So you can visit http://<your-ip>:8000 to visit the website.
 
+the modification of hosts file will be applied by dnsmasq in several seconds.
